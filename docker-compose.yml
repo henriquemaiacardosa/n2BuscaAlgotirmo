@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+
+  # ── Aplicação Flask ──────────────────────────────────────────────────────────
+  app:
+    build: .
+    container_name: string-search-app
+    ports:
+      - "5000:5000"
+    environment:
+      - OTEL_SERVICE_NAME=string-search-explorer
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    depends_on:
+      - jaeger
+      - prometheus
+    restart: unless-stopped
+
+  # ── Jaeger (Traces) ──────────────────────────────────────────────────────────
+  jaeger:
+    image: jaegertracing/all-in-one:1.55
+    container_name: jaeger
+    ports:
+      - "16686:16686"   # UI do Jaeger  →  http://localhost:16686
+      - "4317:4317"     # OTLP gRPC (recebe traces da aplicação)
+      - "4318:4318"     # OTLP HTTP
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    restart: unless-stopped
+
+  # ── Prometheus (Métricas) ────────────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.50.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"     # UI do Prometheus  →  http://localhost:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    restart: unless-stopped
+
+  # ── Grafana (Dashboard) ──────────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: grafana
+    ports:
+      - "3000:3000"     # UI do Grafana  →  http://localhost:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  grafana_data:

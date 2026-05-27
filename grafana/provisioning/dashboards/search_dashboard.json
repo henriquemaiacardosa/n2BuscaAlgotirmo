@@ -1,0 +1,119 @@
+{
+  "id": null,
+  "uid": "string-search-explorer",
+  "title": "String Search Explorer — Observabilidade",
+  "tags": ["string-search", "algorithms", "otel"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Total de Buscas por Algoritmo",
+      "type": "bargauge",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "options": { "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "targets": [
+        {
+          "expr": "sum by (algorithm) (search_executions_total)",
+          "legendFormat": "{{algorithm}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } }
+    },
+    {
+      "id": 2,
+      "title": "Tempo Médio de Execução (ms) por Algoritmo",
+      "type": "bargauge",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "options": { "orientation": "horizontal", "reduceOptions": { "calcs": ["mean"] } },
+      "targets": [
+        {
+          "expr": "avg by (algorithm) (rate(search_duration_ms_sum[5m]) / rate(search_duration_ms_count[5m]))",
+          "legendFormat": "{{algorithm}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "ms", "color": { "mode": "palette-classic" } } }
+    },
+    {
+      "id": 3,
+      "title": "Comparações Médias por Execução",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "avg by (algorithm) (rate(search_comparisons_total_sum[2m]) / rate(search_comparisons_total_count[2m]))",
+          "legendFormat": "{{algorithm}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } }
+    },
+    {
+      "id": 4,
+      "title": "Taxa de Buscas por Minuto",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum by (algorithm) (rate(search_executions_total[1m]) * 60)",
+          "legendFormat": "{{algorithm}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "reqpm", "color": { "mode": "palette-classic" } } }
+    },
+    {
+      "id": 5,
+      "title": "Tamanho Médio do Texto (chars)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "expr": "avg(rate(search_text_size_chars_sum[5m]) / rate(search_text_size_chars_count[5m]))",
+          "legendFormat": "Tamanho médio"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short" } }
+    },
+    {
+      "id": 6,
+      "title": "Total de Ocorrências Encontradas",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 16 },
+      "targets": [
+        {
+          "expr": "sum(search_occurrences_total)",
+          "legendFormat": "Ocorrências"
+        }
+      ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "steps": [{"color": "green", "value": null}] } } }
+    },
+    {
+      "id": 7,
+      "title": "Execuções Totais",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 16 },
+      "targets": [
+        {
+          "expr": "sum(search_executions_total)",
+          "legendFormat": "Total"
+        }
+      ],
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "steps": [{"color": "blue", "value": null}] } } }
+    },
+    {
+      "id": 8,
+      "title": "Algoritmo Mais Rápido (menor tempo médio)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 16 },
+      "targets": [
+        {
+          "expr": "topk(1, avg by (algorithm) (rate(search_duration_ms_sum[5m]) / rate(search_duration_ms_count[5m])))",
+          "legendFormat": "{{algorithm}}"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "ms" } }
+    }
+  ]
+}

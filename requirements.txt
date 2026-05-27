@@ -1,0 +1,17 @@
+# ── Web framework ─────────────────────────────────────────────────────────────
+flask>=3.0.0
+werkzeug>=3.0.0
+
+# ── OpenTelemetry core ────────────────────────────────────────────────────────
+opentelemetry-api>=1.24.0
+opentelemetry-sdk>=1.24.0
+
+# ── Instrumentação automática Flask ──────────────────────────────────────────
+opentelemetry-instrumentation-flask>=0.45b0
+
+# ── Exporter OTLP (Jaeger) ────────────────────────────────────────────────────
+opentelemetry-exporter-otlp-proto-grpc>=1.24.0
+
+# ── Exporter Prometheus ───────────────────────────────────────────────────────
+opentelemetry-exporter-prometheus>=0.45b0
+prometheus-client>=0.20.0
