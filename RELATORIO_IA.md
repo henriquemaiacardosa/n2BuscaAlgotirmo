@@ -32,10 +32,6 @@ A IA sugeriu o uso da Fetch API no JavaScript para consumir a rota do Flask de f
 
 **O que foi descartado / adaptado:**
 - A IA sugeriu inicialmente a criação de um projeto em React. A sugestão foi descartada para não adicionar complexidade desnecessária ao escopo do trabalho, e o código foi adaptado para Vanilla JS (JavaScript puro) mantendo a leveza do frontend.
-
-**Avaliação crítica:**
-A ferramenta foi muito útil para destravar o modelo mental de como conectar o fluxo de dados do backend com a atualização da interface. A solução inicial precisou de adaptações para se alinhar à estrutura exata dos *dataclasses* (SearchStep e SearchResult) que eu havia desenhado na N1, provando que a IA serve como um guia, mas a arquitetura final depende do desenvolvedor.
-
 ---
 
 ## Entrada 2
