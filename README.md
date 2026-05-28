@@ -3,6 +3,10 @@
 Aplicação web para explorar, visualizar e comparar algoritmos de busca de strings,
 com **observabilidade completa via OpenTelemetry** (traces, métricas e logs).
 
+## Apresentação 
+
+[![Watch the video](https://img.youtube.com/vi/rLbB2yXacec/maxresdefault.jpg)](https://youtu.be/rLbB2yXacec)
+
 ## Algoritmos
 
 | Algoritmo    | Melhor  | Médio   | Pior    |
